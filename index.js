@@ -189,10 +189,11 @@ async function run() {
 
     //Update Appointments for payment
     app.put('/appointments/:id', async (req, res) => {
-      const id = req.params.id;
+      const id = JSON.parse(req.params.id);
+      console.log(id);
       console.log(req.body);
       const payment = req.body;
-      const filter = { _id: ObjectId(id) };
+      const filter = { '_id': ObjectId(id) };
       const updateDoc = {
         $set: {
           payment: payment
@@ -238,6 +239,7 @@ async function run() {
         ship_state: 'Dhaka',
         ship_postcode: 1000,
         ship_country: 'Bangladesh',
+        appointmentId: req.body.appointmentId,
       };
 
       const sslOrder = await SSLCollection.insertOne(data);
@@ -298,8 +300,9 @@ async function run() {
     })
 
     app.put('/success/:id', async (req, res) => {
-      const id = req.params.id;
+      const id = (req.body.appointmentId);
       const payment = req.body;
+      console.log(payment);
       const filter = { _id: ObjectId(id) };
       const updateDoc = {
         $set: {
